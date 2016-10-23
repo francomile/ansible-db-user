@@ -1,0 +1,7 @@
+---
+- name: Role for creating a proxy system user for connecting to MySQL database.
+  hosts: all
+  remote_user: root
+  become: true
+  roles:
+      - db-user

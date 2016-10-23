@@ -1,0 +1,20 @@
+---
+# tasks for creating a SSH proxy user (dbmaster) and a MySQL user (mysql_user) for connectiong to the database.
+ 
+- name: Install python mysql bindings
+  apt: name=python-mysqldb state=installed
+
+- name: Create user dbmaster on system
+  user:
+    name: dbmaster
+    comment: "DBmaster user for Database management"
+    shell: /usr/bin/mysql
+
+- name: Create User's .ssh directory
+  file: path=/home/dbmaster/.ssh state=directory owner=dbmaster group=dbmaster mode=0700
+
+- name: Create User's authorized_keys template file
+  copy: src=authorized_keys dest=/home/dbmaster/.ssh/authorized_keys owner=dbmaster group=dbmaster mode=0600
+
+- name: Create mysql user mysql_user in mysql database
+  mysql_user: name=mysql_user password=9Ry8z2Dt host="127.0.0.1" priv="*.*:ALTER,ALTER ROUTINE,CREATE,CREATE ROUTINE,CREATE TABLESPACE,CREATE TEMPORARY TABLES,CREATE VIEW,DELETE,EVENT,EXECUTE,FILE,INDEX,INSERT,LOCK TABLES,PROCESS,REFERENCES,RELOAD,SELECT,SHOW DATABASES,UPDATE,SHOW VIEW,TRIGGER" state=present
